@@ -5,37 +5,39 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <memory>
+#include "grille.h"
 #include "point.h"
+#include "nuage.h"
 #include "element.h"
 #include "affichage.h"
+class Grille;
+class Point;
 
 using namespace std;
 
-class Orthese {
+class Orthese: public Element {
 private:
-    vector<Element>& elements;
-    int indexTexture = 0;
-    vector<char> texturesNuages = {'o', '#', '$'};
-    Grille& grille;
+    vector<shared_ptr<Element>> elements;
+    Grille grille;
 
 public:
     Orthese(vector<Point>& points); 
     ~Orthese() = default;
+    int getId() const override { return -1; }
     
     // "a"
-    void afficherInfo();
+    void afficherInfo() const override;
     
     // "o1" et "o2"
-    void afficherIndex(Grille& grille);
-    void afficherTexture(Grille& grille);
+    void afficher() const override;
 
     // "f", "d" et "s"
-    void fusionnerPoints(vector<Point>& points);
+    // fusionner point prend une liste de id
+    void fusionnerPoints(vector<int> ids);
     void deplacerPoint(int id, int nouvelleX, int nouvelleY);
     void supprimerPoint(int id);
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
-    void tracerLigne(Grille& grille, int x0, int y0, int x1, int y1);
-    void traceDistanceMinimale();
-    void traceOrdreId();
+    void afficherLigne() override;
 };

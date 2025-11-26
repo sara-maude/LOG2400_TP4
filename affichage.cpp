@@ -1,4 +1,5 @@
 #include "affichage.h"
+#include "point.h"
 #include <cmath>
 #include <iostream>
 #include <sstream>
@@ -8,6 +9,7 @@ using namespace std;
 
 vector<Point> creerPoints(const string& ligne) {
     vector<Point> points;
+    int idCompteur = 0;
     // On crée un flux de lecture (istringstream) à partir de la chaîne ligne.
     istringstream iss(ligne);
     string token;
@@ -24,14 +26,9 @@ vector<Point> creerPoints(const string& ligne) {
             int x, y;
             // On ajoute un point {x, y} au vecteur de points.
             if (pair >> x >> y) {
-                points.push_back({x, y});
+                points.push_back({x, y, idCompteur++});
             }
         }
     }
     return points;
-}
-
-void deplacerPoint(Point& point, int positionX, int positionY) {
-    point.x = positionX;
-    point.y = positionY;
 }

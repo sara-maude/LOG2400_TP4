@@ -9,7 +9,7 @@ using namespace std;
 Grille::Grille(vector<Point>& points) : grille(hauteur, vector<char>(largeur, ' ')), points(points) {
     for (Point point : points) {
         const char affichage = '.';
-        grille[point.y][point.x] = affichage;
+        grille[point.getY()][point.getX()] = affichage;
     }
 }
 
@@ -23,12 +23,12 @@ void Grille::viderGrille() {
 
 void Grille::afficherTexture() {
     for (Point point : points) {
-        grille[point.y][point.x] = texture;
+        grille[point.getY()][point.getX()] = texture;
     }
     afficherGrille();
 }
 
-void Grille::afficherGrille() {
+void Grille::afficherGrille() const {
     // On imprime la grille.
     for (int y = hauteur - 1; y >= 0; --y) {
         for (int x = 0; x < largeur; ++x)
@@ -37,10 +37,10 @@ void Grille::afficherGrille() {
     }
 }
 
-void Grille::afficherIndex() {
+void Grille::afficherIndex(){
     for (int i = 0; i < points.size(); ++i) {
         const Point& point = points[i];
-        grille[point.y][point.x] = '0' + i;
+        grille[point.getY()][point.getX()] = '0' + i;
     }
     afficherGrille();
 }
@@ -89,9 +89,9 @@ void Grille::imprimerTraceOrdreId() {
 
     for (int i = 0; i < points.size(); i++) {
         if (i < points.size() - 1) {
-            tracerLigne(grille, points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+            tracerLigne(grille, points[i].getX(), points[i].getY(), points[i + 1].getX(), points[i + 1].getY());
         } else {
-            tracerLigne(grille, points[i].x, points[i].y, points[0].x, points[0].y);
+            tracerLigne(grille, points[i].getX(), points[i].getY(), points[0].getX(), points[0].getY());
         }
     }
 }
@@ -107,16 +107,16 @@ void Grille::imprimerTraceDistanceMinimale() {
         double plusPetiteDistance = numeric_limits<double>::max();
         for (int i = 0; i < points.size(); ++i) {
             if (connexion[i] == 0) {
-                double distance = sqrt(pow(points[i].x - points[indexActuel].x, 2) +
-                                       pow(points[i].y - points[indexActuel].y, 2));
+                double distance = sqrt(pow(points[i].getX() - points[indexActuel].getX(), 2) +
+                                       pow(points[i].getY() - points[indexActuel].getY(), 2));
                 if (distance < plusPetiteDistance) {
                     plusPetiteDistance = distance;
                     indexPlusProche = i;
                 }
             }
         }
-        tracerLigne(grille, points[indexActuel].x, points[indexActuel].y,
-                    points[indexPlusProche].x, points[indexPlusProche].y);
+        tracerLigne(grille, points[indexActuel].getX(), points[indexActuel].getY(),
+                    points[indexPlusProche].getX(), points[indexPlusProche].getY());
 
         connexion[indexPlusProche]++;
         indexActuel = indexPlusProche;
@@ -133,6 +133,6 @@ void Grille::imprimerTraceDistanceMinimale() {
             }
         }
     }
-    tracerLigne(grille, points[premierIndex].x, points[premierIndex].y,
-                    points[deuxiemeIndex].x, points[deuxiemeIndex].y);
+    tracerLigne(grille, points[premierIndex].getX(), points[premierIndex].getY(),
+                    points[deuxiemeIndex].getX(), points[deuxiemeIndex].getY());
 }

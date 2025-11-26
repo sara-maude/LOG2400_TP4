@@ -1,4 +1,6 @@
-#include "grille.h"
+#include "affichage.h"
+#include "point.h"
+#include "orthese.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -21,7 +23,7 @@ int main(int argc, char* argv[]) {
     // Voici des fonctions utiles pour réaliser le TP. 
     // TODO: Il faudrait les placer dans des classes appropriées.
     vector<Point> points = creerPoints(args);
-    Grille grille(points);
+    Orthese orthese(points);
     
     // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
     vector<char> texturesNuages = {'o', '#', '$'};
@@ -49,19 +51,28 @@ int main(int argc, char* argv[]) {
             cout << "Nouvelle position x y: ";
             int x, y;
             cin >> x >> y;
-            deplacerPoint(points[id], x, y);
+            orthese.deplacerPoint(id, x, y);
         }
-        if (cmd == "o1") {
-            grille.afficherTexture();
+        if (cmd == "s") {
+            cout << "ID du point à supprimer: ";
+            int id;
+            cin >> id;
+            orthese.supprimerPoint(id);
         }
-        if (cmd == "o2") {
-            grille.afficherIndex();
+        if (cmd == "f") {
+            cout << "IDs des points à fusionner (séparés par des espaces): ";
+            string line;
+            getline(cin, line);
+            istringstream iss(line);
+            vector<int> ids;
+            int id;
+            while (iss >> id) {
+                ids.push_back(id);
+            }
+            orthese.fusionnerPoints(ids);
         }
-        if (cmd == "c1") {
-            grille.imprimerTraceOrdreId();
-        }
-        if (cmd == "c2") {
-            grille.imprimerTraceDistanceMinimale();
+        if (cmd == "a") {
+            orthese.afficherInfo();
         }
     }
 

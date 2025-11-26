@@ -5,31 +5,24 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include "grille.h"
-#include "affichage.h"
 
 using namespace std;
 
 class Element {
 private:
 public:
-    Element(); 
+    Element() = default; 
     ~Element() = default;
     virtual int getId() const = 0;
     
     // "a"
-    void afficherInfo();
+    virtual void afficherInfo() const = 0;
     
     // "o1" et "o2"
-    void afficherIndex(Grille& grille);
-    void afficherTexture(Grille& grille);
+    virtual void afficher() const = 0;
 
-    // "f", "d" et "s"
-    void deplacerPoint(int id, int nouvelleX, int nouvelleY);
-    void supprimerPoint(int id);
+    virtual void deplacerPoint(int id, int nouvelleX, int nouvelleY) = 0;
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
-    void tracerLigne(Grille& grille, int x0, int y0, int x1, int y1);
-    void traceDistanceMinimale();
-    void traceOrdreId();
+    virtual void afficherLigne() = 0;
 };

@@ -9,35 +9,38 @@
 #include "point.h"
 #include "element.h"
 #include "affichage.h"
+#include "grille.h"
+class Grille;
+class Point;
 
 using namespace std;
 
-class Nuage: public Element, public Orthese {
+class Nuage: public Element {
 private:
-    vector<Point>& points;
-    int indexTexture = 0;
-    vector<char> texturesNuages = {'o', '#', '$'};
+    // vector de shared ptr point
+    vector<shared_ptr<Point>> points;
     Grille& grille;
+    // int indexTexture = 0;
+    // vector<char> texturesNuages = {'o', '#', '$'};
 
 public:
-    Nuage(vector<Point>& points); 
+    Nuage(vector<shared_ptr<Point>>& points, Grille& grille) : points(points), grille(grille) {}; 
     ~Nuage() = default;
     int getId() const override { return -1; }
     
     // "a"
-    void afficherInfo();
+    void afficherInfo() const override;
     
     // "o1" et "o2"
-    void afficherIndex(Grille& grille);
-    void afficherTexture(Grille& grille);
+    void afficher() const override;
 
     // "f", "d" et "s"
-    void fusionnerPoints(vector<Point>& points);
-    void deplacerPoint(int id, int nouvelleX, int nouvelleY);
-    void supprimerPoint(int id);
+    void deplacerPoint(int id, int nouvelleX, int nouvelleY) override;
+    // Supprime un point du nuage. Retourne true si un point a été supprimé.
+    bool supprimerPoint(int id);
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
-    void tracerLigne(Grille& grille, int x0, int y0, int x1, int y1);
-    void traceDistanceMinimale();
-    void traceOrdreId();
+    void afficherLigne() override;
+    // Accès aux points contenus (pour réindexation depuis Orthese)
+    std::vector<std::shared_ptr<Point>>& getPoints() { return points; }
 };
