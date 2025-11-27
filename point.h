@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <memory>
 // #include "element.h"
-#include "affichage.h"
+// #include "affichage.h"
 
 using namespace std;
 
@@ -37,11 +37,12 @@ private:
     int x, y;
     int id;
     vector<shared_ptr<DecorateurTexture>> textures;
+
 public:
     Point(int x, int y, int id) : x(x), y(y), id(id) {}; 
     Point(const Point& other) = default;
     ~Point() = default;
-    
+
     int getId() const { return id; }
     int getX() const { return x; }
     int getY() const { return y; }

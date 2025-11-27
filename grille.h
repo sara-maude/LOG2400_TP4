@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include "affichage.h"
+// #include "affichage.h"
 #include "point.h"
 
 using namespace std;
@@ -19,12 +19,8 @@ public:
 
     Grille();
     ~Grille() = default;
-    // void imprimerTraceOrdreId();
+
     void tracerLigne(int x0, int y0, int x1, int y1);
     void imprimerGrille() const;
-    // void afficherIndex();
     void viderGrille();
-    // void afficherTexture();
-
-    // void imprimerTraceDistanceMinimale();
 };

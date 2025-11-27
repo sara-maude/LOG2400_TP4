@@ -10,7 +10,7 @@
 #include "point.h"
 #include "nuage.h"
 #include "element.h"
-#include "affichage.h"
+// #include "affichage.h"
 class Grille;
 class Point;
 class Nuage;
@@ -41,7 +41,7 @@ private:
     int prochainIdNuage = 0;
 
 public:
-    Orthese(vector<Point>& points); 
+    Orthese(const string& ligne); 
     ~Orthese() = default;
     
     // "a"

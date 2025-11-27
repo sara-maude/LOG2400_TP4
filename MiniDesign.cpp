@@ -1,4 +1,4 @@
-#include "affichage.h"
+// #include "affichage.h"
 #include "point.h"
 #include "orthese.h"
 #include <iostream>
@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
         getline(cin, args);
     }
     
-    vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
-    Orthese orthese(points);
+    // vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
+    Orthese orthese(args);
     
     string cmd;
     
