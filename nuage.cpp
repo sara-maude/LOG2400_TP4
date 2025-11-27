@@ -7,15 +7,10 @@
 using namespace std;
 
 Nuage::Nuage(vector<shared_ptr<Point>>& points, int index) : points(points) {
-    switch (index % 3) {
-        case 0: texture = make_shared<TextureO>(); break;
-        case 1: texture = make_shared<TextureHash>(); break;
-        case 2: texture = make_shared<TextureDollar>(); break;
-    }
+    texture = texturesDisponibles[index % texturesDisponibles.size()];
 
-    for (shared_ptr<Point>& point : points) {
-        point->ajouterTexture(texture);
-    }
+    for (auto& p : points)
+        p->ajouterTexture(texture);
 }
 
 void Nuage::ajouterTextures(shared_ptr<DecorateurTexture> decor) {

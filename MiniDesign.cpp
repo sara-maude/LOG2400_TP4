@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     
     // vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
     Orthese orthese(args);
-    
+
     string cmd;
     
     // Menu

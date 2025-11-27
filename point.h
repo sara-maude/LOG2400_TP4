@@ -6,7 +6,7 @@
 #include <sstream>
 #include <algorithm>
 #include <memory>
-// #include "element.h"
+#include "nuage.h"
 // #include "affichage.h"
 
 using namespace std;
@@ -30,6 +30,12 @@ public:
 class TextureDollar : public DecorateurTexture {
 public:
     char getTexture() const override { return '$'; }
+};
+
+vector<shared_ptr<DecorateurTexture>> Nuage::texturesDisponibles = {
+    make_shared<TextureO>(),
+    make_shared<TextureHash>(),
+    make_shared<TextureDollar>()
 };
 
 class Point {
