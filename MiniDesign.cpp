@@ -20,13 +20,9 @@ int main(int argc, char* argv[]) {
         getline(cin, args);
     }
     
-    // Voici des fonctions utiles pour réaliser le TP. 
-    // TODO: Il faudrait les placer dans des classes appropriées.
-    vector<Point> points = creerPoints(args);
+    vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
     Orthese orthese(points);
     
-    // Ce sont différentes textures possibles. Seules les 2 premières sont utilisées dans les scénarios du TP.
-    vector<char> texturesNuages = {'o', '#', '$'};
     string cmd;
     
     // Menu
@@ -73,6 +69,20 @@ int main(int argc, char* argv[]) {
         }
         if (cmd == "a") {
             orthese.afficherInfo();
+        }
+        if (cmd == "o1") {
+            orthese.afficherTexture();
+        }
+        if (cmd == "o2") {
+            orthese.afficherIndex();
+        }
+        if (cmd == "c1") {
+            SurfaceId strategieId;
+            orthese.afficherSurface(strategieId);
+        }
+        if (cmd == "c2") {
+            SurfaceDistance strategieDistance;
+            orthese.afficherSurface(strategieDistance);
         }
     }
 

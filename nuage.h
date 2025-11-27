@@ -7,40 +7,32 @@
 #include <algorithm>
 #include "orthese.h"
 #include "point.h"
-#include "element.h"
+// #include "element.h"
 #include "affichage.h"
 #include "grille.h"
 class Grille;
 class Point;
+class DecorateurTexture;
 
 using namespace std;
 
-class Nuage: public Element {
+class Nuage {
 private:
-    // vector de shared ptr point
     vector<shared_ptr<Point>> points;
-    Grille& grille;
-    // int indexTexture = 0;
-    // vector<char> texturesNuages = {'o', '#', '$'};
+    shared_ptr<DecorateurTexture> texture;
+
+    // static vector avec les textures possibles pour plus de flexibilité
 
 public:
-    Nuage(vector<shared_ptr<Point>>& points, Grille& grille) : points(points), grille(grille) {}; 
+    Nuage(vector<shared_ptr<Point>>& points, int index); 
     ~Nuage() = default;
-    int getId() const override { return -1; }
     
     // "a"
-    void afficherInfo() const override;
-    
-    // "o1" et "o2"
-    void afficher() const override;
+    void afficherInfo() const;
 
-    // "f", "d" et "s"
-    void deplacerPoint(int id, int nouvelleX, int nouvelleY) override;
     // Supprime un point du nuage. Retourne true si un point a été supprimé.
     bool supprimerPoint(int id);
 
-    // Méthodes pour tracer l'orthèse ("c1" et "c2")
-    void afficherLigne() override;
     // Accès aux points contenus (pour réindexation depuis Orthese)
-    std::vector<std::shared_ptr<Point>>& getPoints() { return points; }
+    vector<shared_ptr<Point>>& getPoints() { return points; }
 };

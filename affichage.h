@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-struct Point;
+class Point;
 
 const int LARGEUR = 30;
 const int HAUTEUR = 20;

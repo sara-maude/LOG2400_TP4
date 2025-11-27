@@ -15,20 +15,16 @@ public:
     const int largeur = 30;
     const int hauteur = 20;
     vector<vector<char>> grille;
-    vector<Point>& points;
-    char texture = '.';
 
 
-    Grille(vector<Point>& points);
+    Grille();
     ~Grille() = default;
-    void imprimerTraceOrdreId();
-    void tracerLigne(vector<vector<char>>& grille, int x0, int y0, int x1, int y1);
-    void afficherGrille() const;
-    void afficherIndex();
+    // void imprimerTraceOrdreId();
+    void tracerLigne(int x0, int y0, int x1, int y1);
+    void imprimerGrille() const;
+    // void afficherIndex();
     void viderGrille();
-    void afficherTexture();
-    void changerTexture(char nouvelleTexture) {
-        texture = nouvelleTexture;
-    }
-    void imprimerTraceDistanceMinimale();
+    // void afficherTexture();
+
+    // void imprimerTraceDistanceMinimale();
 };

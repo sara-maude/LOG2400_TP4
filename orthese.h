@@ -13,31 +13,50 @@
 #include "affichage.h"
 class Grille;
 class Point;
+class Nuage;
 
 using namespace std;
 
-class Orthese: public Element {
+class InterfaceStrategieSurface {
+public:
+    virtual void tracerSurface(vector<shared_ptr<Point>>& points, Grille& grille) const = 0;
+    virtual ~InterfaceStrategieSurface() = default;
+};
+
+class SurfaceId : public InterfaceStrategieSurface {
+public:
+    void tracerSurface(vector<shared_ptr<Point>>& points, Grille& grille) const override;
+};
+
+class SurfaceDistance : public InterfaceStrategieSurface {
+public:
+    void tracerSurface(vector<shared_ptr<Point>>& points, Grille& grille) const override;
+};
+
+class Orthese {
 private:
-    vector<shared_ptr<Element>> elements;
+    vector<shared_ptr<Point>> points;
+    vector<unique_ptr<Nuage>> nuages;
     Grille grille;
+    int prochainIdNuage = 0;
 
 public:
     Orthese(vector<Point>& points); 
     ~Orthese() = default;
-    int getId() const override { return -1; }
     
     // "a"
-    void afficherInfo() const override;
+    void afficherInfo();
     
     // "o1" et "o2"
-    void afficher() const override;
+    void afficherAvecTransformation(function<vector<char>(const Point&)> f);
+    void afficherTexture();
+    void afficherIndex();
 
     // "f", "d" et "s"
-    // fusionner point prend une liste de id
     void fusionnerPoints(vector<int> ids);
     void deplacerPoint(int id, int nouvelleX, int nouvelleY);
     void supprimerPoint(int id);
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
-    void afficherLigne() override;
+    void afficherSurface(const InterfaceStrategieSurface& strategie);
 };
