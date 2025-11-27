@@ -8,7 +8,6 @@
 using namespace std;
 
 Orthese::Orthese(const string& ligne) : grille() {
-    int idCompteur = 0;
     // On crée un flux de lecture (istringstream) à partir de la chaîne ligne.
     istringstream iss(ligne);
     string token;
@@ -25,25 +24,24 @@ Orthese::Orthese(const string& ligne) : grille() {
             int x, y;
             // On ajoute un point {x, y} au vecteur de points.
             if (pair >> x >> y) {
-                points.push_back(make_shared<Point>(x, y, idCompteur++));
+                elements.push_back(make_shared<Point>(x, y));
             }
         }
     }
 }
 
 void Orthese::afficherInfo() {
-    for (shared_ptr<Point>& point : points) {
-        point->afficherInfo();
-    }
-    for (unique_ptr<Nuage>& nuage : nuages) {
-        nuage->afficherInfo();
+    for (shared_ptr<Element>& element : elements) {
+        element->afficherInfo();
     }
 }
 
-void Orthese::afficherAvecTransformation(function<vector<char>(const Point&)> f) {
-    for (shared_ptr<Point> point : points) {
-        for (int i = 0; i < f(*point).size(); ++i) {
-            grille.grille[point->getY()][point->getX() + i] = f(*point)[i];
+void Orthese::afficherAvecTransformation(function<vector<char>(Point&)> f) {
+    for (shared_ptr<Element> element : elements) {
+        if (auto point = dynamic_pointer_cast<Point>(element)) {
+            for (int i = 0; i < f(*point).size(); ++i) {
+                grille.grille[point->getY()][point->getX() + i] = f(*point)[i];
+            }
         }
     }
     grille.imprimerGrille();
@@ -51,14 +49,14 @@ void Orthese::afficherAvecTransformation(function<vector<char>(const Point&)> f)
 
 
 void Orthese::afficherTexture() {
-    afficherAvecTransformation([](const Point& p) {
+    afficherAvecTransformation([](Point& p) {
         return p.getTexture();
     });
 }
 
 
 void Orthese::afficherIndex() {
-    afficherAvecTransformation([](const Point& p) {
+    afficherAvecTransformation([](Point& p) {
         vector<char> ids;
         ids.push_back('0' + p.getId());
         return ids;
@@ -68,29 +66,31 @@ void Orthese::afficherIndex() {
 
 void Orthese::fusionnerPoints(vector<int> ids) {
     grille.viderGrille();
-    vector<shared_ptr<Point>> pointsAAjouter;
+    vector<shared_ptr<Element>> elementsAAjouter;
 
     for (int id : ids) {
-        for (shared_ptr<Point>& point : points) {
-            if (point->getId() == id) {
-                pointsAAjouter.push_back(point);
+        for (shared_ptr<Element>& element : elements) {
+            if (element->getId() == id) {
+                elementsAAjouter.push_back(element);
                 break;
             }
         }
     }
 
-    if (!pointsAAjouter.empty()) {
-        unique_ptr<Nuage> nuage = make_unique<Nuage>(pointsAAjouter, prochainIdNuage++);
-        nuages.push_back(move(nuage));
+    if (!elementsAAjouter.empty()) {
+        shared_ptr<Nuage> nuage = make_shared<Nuage>(elementsAAjouter);
+        elements.push_back(nuage);
     }
 }
 
 void Orthese::deplacerPoint(int id, int nouvelleX, int nouvelleY) {
     grille.viderGrille();
-    for (shared_ptr<Point>& point : points) {
-        if (point->getId() == id) {
-            point->deplacerPoint(id, nouvelleX, nouvelleY);
-            return;
+    for (shared_ptr<Element>& element : elements) {
+        if (element->getId() == id) {
+            if (auto point = dynamic_pointer_cast<Point>(element)) {
+                point->deplacerPoint(id, nouvelleX, nouvelleY);
+                return;
+            }
         }
     }
     cout << "Point avec ID " << id << " non trouvé.\n";
@@ -100,18 +100,23 @@ void Orthese::supprimerPoint(int id) {
     grille.viderGrille();
     bool trouve = false;
 
-    // Supprimer le point global
-    for (shared_ptr<Point>& point : points) {
-        if (point->getId() == id) {
-            points.erase(remove(points.begin(), points.end(), point), points.end());
-            trouve = true;
-            break;
-        }
-    }
+    elements.erase(
+        remove_if(elements.begin(), elements.end(),
+            [id, &trouve](shared_ptr<Element>& elem) {
+                if (auto p = dynamic_pointer_cast<Point>(elem)) {
+                    if (p->getId() == id) {
+                        trouve = true;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        ),
+        elements.end()
+    );
 
-
-    for (unique_ptr<Nuage>& nuage : nuages) {
-        if (nuage) {
+    for (auto& elem : elements) {
+        if (auto nuage = dynamic_pointer_cast<Nuage>(elem)) {
             nuage->supprimerPoint(id);
         }
     }
@@ -120,22 +125,24 @@ void Orthese::supprimerPoint(int id) {
         cout << "Point avec ID " << id << " non trouvé.\n";
     }
 
-    // Mettre à jour les IDs restants
-    for (shared_ptr<Point>& point : points) {
-        if (point->getId() > id) {
-            if (point) point->setId(point->getId() - 1);
+    for (auto& elem : elements) {
+        if (elem->getId() > id) {
+            elem->setId(elem->getId() - 1);
         }
     }
 }
 
+
 void Orthese::afficherSurface(const InterfaceStrategieSurface& strategie) {
     grille.viderGrille();
-    for (unique_ptr<Nuage>& nuage : nuages) {
-        strategie.tracerSurface(nuage->getPoints(), grille);
+    for (shared_ptr<Element>& element : elements) {
+        if (auto nuage = dynamic_pointer_cast<Nuage>(element)) {
+            strategie.tracerSurface(nuage->getPoints(), grille);
+        }
     }
 }
 
-void SurfaceId::tracerSurface(vector<shared_ptr<Point>>& points, Grille& grille) const {
+void SurfaceId::tracerSurface(vector<shared_ptr<Point>> points, Grille& grille) const {
     for (int i = 0; i < points.size(); i++) {
         if (i < points.size() - 1) {
             grille.tracerLigne(points[i]->getX(), points[i]->getY(), points[i + 1]->getX(), points[i + 1]->getY());
@@ -145,7 +152,7 @@ void SurfaceId::tracerSurface(vector<shared_ptr<Point>>& points, Grille& grille)
     }
 }
 
-void SurfaceDistance::tracerSurface(vector<shared_ptr<Point>>& points, Grille& grille) const {
+void SurfaceDistance::tracerSurface(vector<shared_ptr<Point>> points, Grille& grille) const {
     vector<int> connexion(points.size(), 0);
     int indexActuel = 0;
     for (int count = 1; count < points.size(); ++count) {

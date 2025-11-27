@@ -7,7 +7,7 @@
 #include <algorithm>
 #include "orthese.h"
 #include "point.h"
-// #include "element.h"
+#include "element.h"
 // #include "affichage.h"
 #include "grille.h"
 class Grille;
@@ -16,16 +16,17 @@ class DecorateurTexture;
 
 using namespace std;
 
-class Nuage {
+class Nuage: public Element {
 private:
-    vector<shared_ptr<Point>> points;
+    static int compteur;
+    vector<shared_ptr<Element>> elements;
     shared_ptr<DecorateurTexture> texture;
 
     // static vector avec les textures possibles pour plus de flexibilité
     static vector<shared_ptr<DecorateurTexture>> texturesDisponibles;
 
 public:
-    Nuage(vector<shared_ptr<Point>>& points, int index); 
+    Nuage(vector<shared_ptr<Element>>& elements); 
     ~Nuage() = default;
 
     void ajouterTextures(shared_ptr<DecorateurTexture> decor);
@@ -37,5 +38,7 @@ public:
     void supprimerPoint(int id);
 
     // Accès aux points contenus (pour réindexation depuis Orthese)
-    vector<shared_ptr<Point>>& getPoints() { return points; }
+    vector<shared_ptr<Point>> getPoints();
+
+    void ajouterTexture(shared_ptr<DecorateurTexture> decor) override;
 };
