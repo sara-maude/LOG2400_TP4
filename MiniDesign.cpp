@@ -2,7 +2,7 @@
 #include "point.h"
 #include "nuage.h"
 #include "orthese.h"
-#include "texture.h"
+#include "commande.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
     
     // vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
     Orthese orthese(args);
+    GestionCommande gestionnaire;
     // Nuage::ajouterChoixTexture(make_shared<TextureStar>()); c'est surement pas nécessaire
 
     string cmd;
@@ -37,6 +38,8 @@ int main(int argc, char* argv[]) {
                   << "f  - Fusionner des points dans un nuage (et appliquer texture)\n"
                   << "d  - Deplacer un point (ID)\n"
                   << "s  - Supprimer un point (ID)\n"
+                  << "u  - Undo la dernière supression ou le dernier déplacement\n"
+                  << "r  - Redo le dernier undo\n"
                   << "c1 - Créer les surfaces selon l'ordre des IDs\n"
                   << "c2 - Créer les surfaces selon la distance minimale\n"
                   << "q  - Quitter\n> ";
@@ -50,13 +53,22 @@ int main(int argc, char* argv[]) {
             cout << "Nouvelle position x y: ";
             int x, y;
             cin >> x >> y;
-            orthese.deplacerPoint(id, x, y);
+
+            CommandeDeplacement deplacement = CommandeDeplacement(orthese, id, x, y);
+            gestionnaire.executer(make_shared<CommandeDeplacement>(deplacement));
         }
         if (cmd == "s") {
             cout << "ID du point à supprimer: ";
             int id;
             cin >> id;
-            orthese.supprimerPoint(id);
+            CommandeSupression supression = CommandeSupression(orthese, id); 
+            gestionnaire.executer(make_shared<CommandeSupression>(supression));
+        }
+        if (cmd == "u") {
+            gestionnaire.annuler();
+        }
+        if (cmd == "r") {
+            gestionnaire.remettre();
         }
         if (cmd == "f") {
             cout << "IDs des points à fusionner (séparés par des espaces): ";

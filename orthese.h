@@ -41,6 +41,10 @@ private:
 public:
     Orthese(const string& ligne); 
     ~Orthese() = default;
+
+    vector<shared_ptr<Element>> getElements() {
+        return elements;
+    }
     
     // "a"
     void afficherInfo();
@@ -52,8 +56,10 @@ public:
 
     // "f", "d" et "s"
     void fusionnerPoints(vector<int> ids);
+    
     void deplacerPoint(int id, int nouvelleX, int nouvelleY);
     void supprimerPoint(int id);
+    void ajouterPoint(shared_ptr<Point> point);
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
     void afficherSurface(const InterfaceStrategieSurface& strategie);

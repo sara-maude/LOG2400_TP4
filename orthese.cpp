@@ -69,7 +69,6 @@ void Orthese::afficherIndex() {
     });
 }
 
-
 void Orthese::fusionnerPoints(vector<int> ids) {
     grille.viderGrille();
     vector<shared_ptr<Element>> elementsAAjouter;
@@ -131,11 +130,30 @@ void Orthese::supprimerPoint(int id) {
         cout << "Point avec ID " << id << " non trouvé.\n";
     }
 
-    for (auto& elem : elements) {
+    for (shared_ptr<Element> elem : elements) {
         if (elem->getId() > id) {
             elem->setId(elem->getId() - 1);
         }
     }
+}
+
+void Orthese::ajouterPoint(shared_ptr<Point> point) {
+    grille.viderGrille();
+    int id = point->getId();
+
+    vector<shared_ptr<Element>> copieElements;
+
+    for (int i = 0; i <= elements.size(); i++) {
+        if (i < id) {
+            copieElements.push_back(elements[i]);
+        } else if (i == id) {
+            copieElements.push_back(point);
+        } else {
+            elements[i - 1]->setId(i);
+            copieElements.push_back(elements[i - 1]);
+        }
+    }
+    elements = copieElements;
 }
 
 
