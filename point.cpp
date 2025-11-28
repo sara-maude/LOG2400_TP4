@@ -27,7 +27,8 @@ vector<char> Point::getTexture() const {
 }
 
 void Point::ajouterTexture(shared_ptr<DecorateurTexture> decor) {
-    textures.push_back(decor);
+    if (find(textures.begin(), textures.end(), decor) == textures.end())
+        textures.push_back(decor);
 }
 
 void Point::retirerTexture(shared_ptr<DecorateurTexture> decor) {

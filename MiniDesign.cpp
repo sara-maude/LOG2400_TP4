@@ -1,6 +1,8 @@
 // #include "affichage.h"
 #include "point.h"
+#include "nuage.h"
 #include "orthese.h"
+#include "texture.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -22,6 +24,7 @@ int main(int argc, char* argv[]) {
     
     // vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
     Orthese orthese(args);
+    // Nuage::ajouterChoixTexture(make_shared<TextureStar>()); c'est surement pas nécessaire
 
     string cmd;
     

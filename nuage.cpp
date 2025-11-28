@@ -14,9 +14,9 @@ Nuage::Nuage(vector<shared_ptr<Element>>& elements) : elements(elements) {
     ajouterTexture(texture);
 }
 
-void Nuage::ajouterTextures(shared_ptr<DecorateurTexture> decor) {
-    texturesDisponibles.push_back(decor);
-}
+// void Nuage::ajouterChoixTexture(shared_ptr<DecorateurTexture> decor) {
+//     texturesDisponibles.push_back(decor);
+// }
 
 void Nuage::afficherInfo() const {
     cout << id << ": Nuage '" << texture->getTexture() << "' contient les points: ";

@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// faire une fonction de recherche d'élément par ID ?
+
 Orthese::Orthese(const string& ligne) : grille() {
     // On crée un flux de lecture (istringstream) à partir de la chaîne ligne.
     istringstream iss(ligne);
@@ -40,6 +42,10 @@ void Orthese::afficherAvecTransformation(function<vector<char>(Point&)> f) {
     for (shared_ptr<Element> element : elements) {
         if (auto point = dynamic_pointer_cast<Point>(element)) {
             for (int i = 0; i < f(*point).size(); ++i) {
+                if (point->getX() + i >= grille.largeur) {
+                    cout << "Point " << point->getId() << " a la texture " << f(*point)[i] <<" hors de la grille\n";
+                    continue;
+                }
                 grille.grille[point->getY()][point->getX() + i] = f(*point)[i];
             }
         }

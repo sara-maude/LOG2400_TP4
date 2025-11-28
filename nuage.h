@@ -29,7 +29,7 @@ public:
     Nuage(vector<shared_ptr<Element>>& elements); 
     ~Nuage() = default;
 
-    void ajouterTextures(shared_ptr<DecorateurTexture> decor);
+    // static void ajouterChoixTexture(shared_ptr<DecorateurTexture> decor);
     
     // "a"
     void afficherInfo() const;
