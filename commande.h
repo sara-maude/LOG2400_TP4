@@ -20,6 +20,7 @@ private:
     Orthese& orthese;
     int id;
     shared_ptr<Point> ancienPoint;
+    vector<shared_ptr<Nuage>> nuagesContenantPoint;
 public:
     CommandeSupression(Orthese& orthese, int id);
     ~CommandeSupression() = default;

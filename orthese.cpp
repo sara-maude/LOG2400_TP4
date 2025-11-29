@@ -137,23 +137,22 @@ void Orthese::supprimerPoint(int id) {
     }
 }
 
-void Orthese::ajouterPoint(shared_ptr<Point> point) {
+void Orthese::ajouterPoint(shared_ptr<Point> point, vector<shared_ptr<Nuage>> nuages) {
     grille.viderGrille();
     int id = point->getId();
 
-    vector<shared_ptr<Element>> copieElements;
-
-    for (int i = 0; i <= elements.size(); i++) {
-        if (i < id) {
-            copieElements.push_back(elements[i]);
-        } else if (i == id) {
-            copieElements.push_back(point);
-        } else {
-            elements[i - 1]->setId(i);
-            copieElements.push_back(elements[i - 1]);
+    for (shared_ptr<Element> element: elements) {
+        int elemId = element->getId();
+        if (elemId >= id) {
+            element->setId(++elemId);
         }
     }
-    elements = copieElements;
+
+    elements.insert(elements.begin() + id, point);
+    
+    for (shared_ptr<Nuage> nuage: nuages) {
+        nuage->ajouterPoint(point);
+    }
 }
 
 

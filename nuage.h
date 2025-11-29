@@ -36,9 +36,11 @@ public:
 
     // Supprime un point du nuage.
     void supprimerPoint(int id);
+    void ajouterPoint(shared_ptr<Point> point);
 
     // Accès aux points contenus (pour réindexation depuis Orthese)
     vector<shared_ptr<Point>> getPoints();
+    vector<shared_ptr<Element>> getElements();
 
     void ajouterTexture(shared_ptr<DecorateurTexture> decor) override;
 };

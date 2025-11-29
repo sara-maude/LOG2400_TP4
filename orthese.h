@@ -59,7 +59,7 @@ public:
     
     void deplacerPoint(int id, int nouvelleX, int nouvelleY);
     void supprimerPoint(int id);
-    void ajouterPoint(shared_ptr<Point> point);
+    void ajouterPoint(shared_ptr<Point> point, vector<shared_ptr<Nuage>> nuages);
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
     void afficherSurface(const InterfaceStrategieSurface& strategie);

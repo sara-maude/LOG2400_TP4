@@ -39,6 +39,23 @@ void Nuage::supprimerPoint(int id) {
     }
 }
 
+void Nuage::ajouterPoint(shared_ptr<Point> point) {
+    int pointId = point->getId();
+    int posPoint = -1;
+
+    for (int i = 0; i < elements.size(); i++) {
+        if (elements[i]->getId() > pointId) {
+            posPoint = i;
+            break;
+        }
+    }
+    if (posPoint == -1) {
+        posPoint = elements.size();
+    }
+
+    elements.insert(elements.begin() + posPoint, point);
+}
+
 vector<shared_ptr<Point>> Nuage::getPoints() {
     vector<shared_ptr<Point>> pointsDuNuage;
 
@@ -52,6 +69,10 @@ vector<shared_ptr<Point>> Nuage::getPoints() {
     }
 
     return pointsDuNuage;
+}
+
+vector<shared_ptr<Element>> Nuage::getElements() {
+    return elements;
 }
 
 void Nuage::ajouterTexture(shared_ptr<DecorateurTexture> decor) {

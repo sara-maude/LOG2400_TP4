@@ -4,6 +4,19 @@ using namespace std;
 
 CommandeSupression::CommandeSupression(Orthese& orthese, int id): orthese(orthese), id(id) {
     ancienPoint = dynamic_pointer_cast<Point>(orthese.getElements()[id]);
+
+    for (shared_ptr<Element> element: orthese.getElements()) {
+        if (shared_ptr<Nuage> nuage = dynamic_pointer_cast<Nuage>(element)) {
+            for (shared_ptr<Element> element: nuage->getElements()) {
+                if (shared_ptr<Point> point = dynamic_pointer_cast<Point>(element)) {
+                    if (point->getId() == id) {
+                        nuagesContenantPoint.push_back(nuage);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void CommandeSupression::executer() const {
@@ -11,7 +24,7 @@ void CommandeSupression::executer() const {
 }
 
 void CommandeSupression::annuler() const {
-    orthese.ajouterPoint(ancienPoint);
+    orthese.ajouterPoint(ancienPoint, nuagesContenantPoint);
 }
 
 CommandeDeplacement::CommandeDeplacement(Orthese& orthese, int id, int positionX, int positionY):
