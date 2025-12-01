@@ -5,7 +5,7 @@ protected:
     shared_ptr<Point> point;
 
 public:
-    DecorateurTexture(shared_ptr<Point> point): point(point), Point(point->getX(), point->getY(), point->getId()) {}
+    DecorateurTexture(shared_ptr<Point> point): point(point), Point(point->getId()) {}
     virtual ~DecorateurTexture() = default;
 
     int getX() const override {

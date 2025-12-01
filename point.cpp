@@ -6,17 +6,17 @@
 
 using namespace std;
 
-void Point::afficherInfo() const {
+void PointConcret::afficherInfo() const {
     cout << id << ":" << " (" << x << "," << y << ") textures: '";
     cout << getTexture();
     cout << "'\n";
 }
 
-string Point::getTexture() const {
+string PointConcret::getTexture() const {
     return "";
 }
 
-void Point::deplacerPoint(int id, int nouvelleX, int nouvelleY) {
+void PointConcret::deplacerPoint(int id, int nouvelleX, int nouvelleY) {
     x = nouvelleX;
     y = nouvelleY;
 }

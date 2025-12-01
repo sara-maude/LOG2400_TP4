@@ -11,21 +11,34 @@
 using namespace std;
 
 class Point: public Element {
+public:
+    Point(int id): Element(id) {}
+    virtual ~Point() = default;
+
+    virtual int getX() const = 0;
+    virtual int getY() const = 0;
+    virtual string getTexture() const = 0;
+
+    virtual void afficherInfo() const = 0;
+    virtual void deplacerPoint(int id, int nouvelleX, int nouvelleY) = 0;
+};
+
+class PointConcret: public Point {
 private:
     int x, y;
 
 public:
-    Point(int x, int y, int id) : x(x), y(y), Element(id) {}; 
-    Point(const Point& other) = default;
-    virtual ~Point() = default;
-    virtual int getX() const { return x; }
-    virtual int getY() const { return y; }
+    PointConcret(int x, int y, int id) : x(x), y(y), Point(id) {}; 
+    PointConcret(const PointConcret& other) = default;
+    ~PointConcret() = default;
+    int getX() const override { return x; }
+    int getY() const override { return y; }
 
-    virtual string getTexture() const;
+    string getTexture() const override;
     
     // "a"
-    virtual void afficherInfo() const override;
+    void afficherInfo() const override;
 
     // "f", "d" et "s"
-    virtual void deplacerPoint(int id, int nouvelleX, int nouvelleY);
+    void deplacerPoint(int id, int nouvelleX, int nouvelleY);
 };

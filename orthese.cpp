@@ -24,7 +24,7 @@ Orthese::Orthese(const string& ligne) : grille() {
             int x, y;
             // On ajoute un point {x, y} au vecteur de points.
             if (pair >> x >> y) {
-                elements.push_back(make_shared<Point>(x, y, idElement++));
+                elements.push_back(make_shared<PointConcret>(x, y, idElement++));
             }
         }
     }
