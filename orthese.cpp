@@ -7,8 +7,6 @@
 
 using namespace std;
 
-// faire une fonction de recherche d'élément par ID ?
-
 Orthese::Orthese(const string& ligne) : grille() {
     // On crée un flux de lecture (istringstream) à partir de la chaîne ligne.
     istringstream iss(ligne);
@@ -26,7 +24,7 @@ Orthese::Orthese(const string& ligne) : grille() {
             int x, y;
             // On ajoute un point {x, y} au vecteur de points.
             if (pair >> x >> y) {
-                elements.push_back(make_shared<Point>(x, y));
+                elements.push_back(make_shared<Point>(x, y, idElement++));
             }
         }
     }
@@ -38,7 +36,7 @@ void Orthese::afficherInfo() {
     }
 }
 
-void Orthese::afficherAvecTransformation(function<vector<char>(Point&)> f) {
+void Orthese::afficherAvecTransformation(function<string(Point&)> f) {
     for (shared_ptr<Element> element : elements) {
         if (auto point = dynamic_pointer_cast<Point>(element)) {
             for (int i = 0; i < f(*point).size(); ++i) {
@@ -56,35 +54,40 @@ void Orthese::afficherAvecTransformation(function<vector<char>(Point&)> f) {
 
 void Orthese::afficherTexture() {
     afficherAvecTransformation([](Point& p) {
-        return p.getTexture();
+        string texture = p.getTexture() == "" ? "." : p.getTexture();
+        return texture;
     });
 }
 
 
 void Orthese::afficherIndex() {
     afficherAvecTransformation([](Point& p) {
-        vector<char> ids;
-        ids.push_back('0' + p.getId());
-        return ids;
+        return std::to_string(p.getId());
     });
 }
 
-void Orthese::fusionnerPoints(vector<int> ids) {
-    grille.viderGrille();
+void Orthese::fusionnerPoints(const vector<int>& ids) {
     vector<shared_ptr<Element>> elementsAAjouter;
 
     for (int id : ids) {
-        for (shared_ptr<Element>& element : elements) {
-            if (element->getId() == id) {
-                elementsAAjouter.push_back(element);
+        for (auto it = elements.begin(); it != elements.end(); ++it) {
+            if ((*it)->getId() == id) {
+                elementsAAjouter.push_back(*it);
                 break;
             }
         }
     }
 
-    if (!elementsAAjouter.empty()) {
-        shared_ptr<Nuage> nuage = make_shared<Nuage>(elementsAAjouter);
-        elements.push_back(nuage);
+    shared_ptr<Nuage> nuage = make_shared<Nuage>(elementsAAjouter, idElement++);
+
+    elements.push_back(nuage);
+
+    vector<shared_ptr<Point>> pointsDecores = nuage->getPoints();
+
+    for (shared_ptr<Point>& point : pointsDecores) {
+        int id = point->getId();
+
+        elements[id] = point;
     }
 }
 
@@ -156,11 +159,11 @@ void Orthese::ajouterPoint(shared_ptr<Point> point, vector<shared_ptr<Nuage>> nu
 }
 
 
-void Orthese::afficherSurface(const InterfaceStrategieSurface& strategie) {
+void Orthese::afficherSurface() {
     grille.viderGrille();
     for (shared_ptr<Element>& element : elements) {
         if (auto nuage = dynamic_pointer_cast<Nuage>(element)) {
-            strategie.tracerSurface(nuage->getPoints(), grille);
+            strategie->tracerSurface(nuage->getPoints(), grille);
         }
     }
 }

@@ -5,11 +5,12 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-#include "orthese.h"
-#include "point.h"
+// #include "orthese.h"
+// #include "point.h"
 #include "element.h"
 // #include "affichage.h"
 #include "grille.h"
+#include "texture.h"
 class Grille;
 class Point;
 class DecorateurTexture;
@@ -18,21 +19,22 @@ using namespace std;
 
 class Nuage: public Element {
 private:
-    static int compteur;
     vector<shared_ptr<Element>> elements;
-    shared_ptr<DecorateurTexture> texture;
+    char texture = '%';
 
     // static vector avec les textures possibles pour plus de flexibilité
-    static vector<shared_ptr<DecorateurTexture>> texturesDisponibles;
-
+    // static vector<shared_ptr<DecorateurTexture>> texturesDisponibles;
+    
 public:
-    Nuage(vector<shared_ptr<Element>>& elements); 
+    Nuage(vector<shared_ptr<Element>>& elements, int id); 
     ~Nuage() = default;
 
-    // static void ajouterChoixTexture(shared_ptr<DecorateurTexture> decor);
+    // void setTexture(char nouvelleTexture) {
+    //     texture = nouvelleTexture;
+    // }
     
     // "a"
-    void afficherInfo() const;
+    void afficherInfo() const override;
 
     // Supprime un point du nuage.
     void supprimerPoint(int id);
@@ -42,5 +44,7 @@ public:
     vector<shared_ptr<Point>> getPoints();
     vector<shared_ptr<Element>> getElements();
 
-    void ajouterTexture(shared_ptr<DecorateurTexture> decor) override;
+    static vector<function<shared_ptr<Element>(shared_ptr<Point>)>> texturesDisponibles;
+    static int compteur;
+    void ajouterTexture(int index);
 };

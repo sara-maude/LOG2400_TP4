@@ -54,15 +54,17 @@ int main(int argc, char* argv[]) {
             int x, y;
             cin >> x >> y;
 
-            CommandeDeplacement deplacement = CommandeDeplacement(orthese, id, x, y);
-            gestionnaire.executer(make_shared<CommandeDeplacement>(deplacement));
+            shared_ptr<CommandeDeplacement> deplacement = make_shared<CommandeDeplacement>(orthese, id, x, y);
+            gestionnaire.setCommande(deplacement);
+            gestionnaire.executer();
         }
         if (cmd == "s") {
             cout << "ID du point à supprimer: ";
             int id;
             cin >> id;
-            CommandeSupression supression = CommandeSupression(orthese, id); 
-            gestionnaire.executer(make_shared<CommandeSupression>(supression));
+            shared_ptr<CommandeSupression> supression = make_shared<CommandeSupression>(orthese, id); 
+            gestionnaire.setCommande(supression);
+            gestionnaire.executer();
         }
         if (cmd == "u") {
             gestionnaire.annuler();
@@ -92,12 +94,14 @@ int main(int argc, char* argv[]) {
             orthese.afficherIndex();
         }
         if (cmd == "c1") {
-            SurfaceId strategieId;
-            orthese.afficherSurface(strategieId);
+            shared_ptr<SurfaceId> strategieId = make_shared<SurfaceId>();
+            orthese.setStrategie(strategieId);
+            orthese.afficherSurface();
         }
         if (cmd == "c2") {
-            SurfaceDistance strategieDistance;
-            orthese.afficherSurface(strategieDistance);
+            shared_ptr<SurfaceDistance> strategieDistance = make_shared<SurfaceDistance>();
+            orthese.setStrategie(strategieDistance);
+            orthese.afficherSurface();
         }
     }
 

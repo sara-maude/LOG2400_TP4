@@ -47,11 +47,14 @@ class GestionCommande {
 public:
     ~GestionCommande() = default;
 
-    void executer(shared_ptr<Commande> commande);
+    void setCommande(shared_ptr<Commande> commande);
+
+    void executer();
     void annuler();
     void remettre();
 
 private:
+    shared_ptr<Commande> commandeSuivante;
     vector<shared_ptr<Commande>> ordreAnnulation;
     vector<shared_ptr<Commande>> ordreReexecution;
 };

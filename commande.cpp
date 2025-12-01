@@ -49,9 +49,13 @@ void CommandeDeplacement::annuler() const {
     orthese.deplacerPoint(id, ancienX, ancienY);
 }
 
-void GestionCommande::executer(shared_ptr<Commande> commande) {
-    commande->executer();
-    ordreAnnulation.push_back(commande);
+void GestionCommande::setCommande(shared_ptr<Commande> commande) {
+    commandeSuivante = commande;
+}
+
+void GestionCommande::executer() {
+    commandeSuivante->executer();
+    ordreAnnulation.push_back(commandeSuivante);
     ordreReexecution.clear();
 }
 

@@ -5,21 +5,16 @@
 #include <algorithm>
 
 using namespace std;
-
 int Nuage::compteur = 0;
 
-Nuage::Nuage(vector<shared_ptr<Element>>& elements) : elements(elements) {
-    texture = texturesDisponibles[compteur++ % texturesDisponibles.size()];
-
-    ajouterTexture(texture);
+Nuage::Nuage(vector<shared_ptr<Element>>& nouveauxElements, int id) : elements(nouveauxElements), Element(id) {
+    int index = compteur++;
+    ajouterTexture(index);
+    texture = getPoints()[0]->getTexture().back();
 }
 
-// void Nuage::ajouterChoixTexture(shared_ptr<DecorateurTexture> decor) {
-//     texturesDisponibles.push_back(decor);
-// }
-
 void Nuage::afficherInfo() const {
-    cout << id << ": Nuage '" << texture->getTexture() << "' contient les points: ";
+    cout << id << ": Nuage '" << texture << "' contient les points: ";
     int taille = elements.size();
     for (int i = 0; i < taille; ++i) {
         cout << elements[i]->getId();
@@ -75,14 +70,20 @@ vector<shared_ptr<Element>> Nuage::getElements() {
     return elements;
 }
 
-void Nuage::ajouterTexture(shared_ptr<DecorateurTexture> decor) {
-    for (shared_ptr<Element>& p : elements)
-        p->ajouterTexture(decor);
+void Nuage::ajouterTexture(int index) {
+    auto appliquerTexture = texturesDisponibles[index % texturesDisponibles.size()];
+    for (shared_ptr<Element>& element: elements) {
+        if (shared_ptr<Point> point = dynamic_pointer_cast<Point>(element)) {
+            element = appliquerTexture(point);
+        } else {
+            shared_ptr<Nuage> nuage = dynamic_pointer_cast<Nuage>(element);
+            nuage->ajouterTexture(index);
+        }
+    }
 }
 
-vector<shared_ptr<DecorateurTexture>> Nuage::texturesDisponibles = {
-    make_shared<TextureO>(),
-    make_shared<TextureHash>(),
-    make_shared<TextureDollar>(),
-    make_shared<TextureStar>()
+vector<function<shared_ptr<Element>(shared_ptr<Point>)>> Nuage::texturesDisponibles = {
+    [](shared_ptr<Point> p){ return make_shared<TextureO>(p); },
+    [](shared_ptr<Point> p){ return make_shared<TextureHash>(p); },
+    [](shared_ptr<Point> p){ return make_shared<TextureDollar>(p); }
 };
