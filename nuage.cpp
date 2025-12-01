@@ -14,13 +14,10 @@ Nuage::Nuage(vector<shared_ptr<Element>>& nouveauxElements, int id) : elements(n
 }
 
 void Nuage::afficherInfo() const {
-    cout << id << ": Nuage '" << texture << "' contient les points: ";
+    cout << id << ": Nuage '" << texture << "' contient les elements:";
     int taille = elements.size();
     for (int i = 0; i < taille; ++i) {
-        cout << elements[i]->getId();
-        if (i < taille - 1) {
-            cout << ", ";
-        }
+        cout << " " << elements[i]->getId();
     }
     cout << '\n';
 }

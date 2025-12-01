@@ -35,11 +35,11 @@ int main(int argc, char* argv[]) {
                   << "a  - Afficher les points et les nuages\n"
                   << "o1 - Afficher l'orthèse avec les textures des points\n"
                   << "o2 - Afficher l'orthèse avec les IDs des points\n"
-                  << "f  - Fusionner des points dans un nuage (et appliquer texture)\n"
+                  << "f  - Fusionner des points/nuages dans un nouveau nuage\n"
                   << "d  - Deplacer un point (ID)\n"
                   << "s  - Supprimer un point (ID)\n"
-                  << "u  - Undo la dernière supression ou le dernier déplacement\n"
-                  << "r  - Redo le dernier undo\n"
+                  << "u  - Annuler la dernière commande (undo)\n"
+                  << "r  - Réappliquer la dernière commande annulée (redo)\n"
                   << "c1 - Créer les surfaces selon l'ordre des IDs\n"
                   << "c2 - Créer les surfaces selon la distance minimale\n"
                   << "q  - Quitter\n> ";
@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
             gestionnaire.remettre();
         }
         if (cmd == "f") {
-            cout << "IDs des points à fusionner (séparés par des espaces): ";
+            cout << "IDs des points ou nuages à fusionner (ex: 0 1 2): ";
             string line;
             getline(cin, line);
             istringstream iss(line);

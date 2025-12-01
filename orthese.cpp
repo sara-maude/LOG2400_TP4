@@ -169,6 +169,10 @@ void Orthese::afficherSurface() {
 }
 
 void SurfaceId::tracerSurface(vector<shared_ptr<Point>> points, Grille& grille) const {
+    sort(points.begin(), points.end(), [](const shared_ptr<Point>& a, const shared_ptr<Point>& b){
+        return a->getId() < b->getId();
+    });
+
     for (int i = 0; i < points.size(); i++) {
         if (i < points.size() - 1) {
             grille.tracerLigne(points[i]->getX(), points[i]->getY(), points[i + 1]->getX(), points[i + 1]->getY());
@@ -177,6 +181,7 @@ void SurfaceId::tracerSurface(vector<shared_ptr<Point>> points, Grille& grille) 
         }
     }
 }
+
 
 void SurfaceDistance::tracerSurface(vector<shared_ptr<Point>> points, Grille& grille) const {
     vector<int> connexion(points.size(), 0);
