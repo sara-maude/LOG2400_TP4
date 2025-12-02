@@ -3,8 +3,6 @@
 #include <vector>
 #include "orthese.h"
 
-// class Orthese;
-// class Point;
 
 using namespace std;
 

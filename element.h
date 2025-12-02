@@ -23,6 +23,5 @@ public:
         id = nouvelId; 
     }
     
-    // "a"
     virtual void afficherInfo() const = 0;
 };

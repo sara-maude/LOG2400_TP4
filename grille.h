@@ -5,7 +5,6 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-// #include "affichage.h"
 #include "point.h"
 
 using namespace std;

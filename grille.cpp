@@ -17,7 +17,6 @@ void Grille::viderGrille() {
 }
 
 void Grille::imprimerGrille() const {
-    // On imprime la grille.
     for (int y = hauteur - 1; y >= 0; --y) {
         for (int x = 0; x < largeur; ++x)
             cout << grille[y][x];
@@ -31,7 +30,6 @@ void Grille::tracerLigne(int x0, int y0, int x1, int y1) {
     int dy = y1 - y0;
     int taille = max(abs(dx), abs(dy));
 
-    // Ligne horizontale
     if (dy == 0) {
         for (int i = 0; i <= taille; i++) {
             int x = (dx > 0) ? x0 + i : x0 - i;
@@ -41,7 +39,6 @@ void Grille::tracerLigne(int x0, int y0, int x1, int y1) {
         return;
     }
 
-    // Ligne verticale
     if (dx == 0) {
         for (int i = 0; i <= taille; i++) {
             int y = (dy > 0) ? y0 + i : y0 - i;
@@ -51,7 +48,6 @@ void Grille::tracerLigne(int x0, int y0, int x1, int y1) {
         return;
     }
 
-    // Diagonales
     for (int i = 0; i <= taille; ++i) {
         double t = (double)i / taille;
         int x = round(x0 + t * dx);

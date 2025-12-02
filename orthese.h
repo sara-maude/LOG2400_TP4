@@ -52,21 +52,17 @@ public:
         strategie = nouvelleStrategie;
     }
     
-    // "a"
     void afficherInfo();
     
-    // "o1" et "o2"
     void afficherAvecTransformation(function<string(Point&)> f);
     void afficherTexture();
     void afficherIndex();
 
-    // "f", "d" et "s"
     void fusionnerPoints(const vector<int>& ids);
     
     void deplacerPoint(int id, int nouvelleX, int nouvelleY);
     void supprimerPoint(int id);
     void ajouterPoint(shared_ptr<Point> point, vector<shared_ptr<Nuage>> nuages);
 
-    // Méthodes pour tracer l'orthèse ("c1" et "c2")
     void tracerSurface();
 };

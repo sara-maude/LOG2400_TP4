@@ -36,9 +36,7 @@ public:
 
     string getTexture() const override;
     
-    // "a"
     void afficherInfo() const override;
 
-    // "f", "d" et "s"
     void deplacerPoint(int id, int nouvelleX, int nouvelleY);
 };

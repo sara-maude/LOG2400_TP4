@@ -22,10 +22,8 @@ int main(int argc, char* argv[]) {
         getline(cin, args);
     }
     
-    // vector<Point> points = creerPoints(args); //mettre dans le constructeur Orthese
     Orthese orthese(args);
     GestionCommande gestionnaire;
-    // Nuage::ajouterChoixTexture(make_shared<TextureStar>()); c'est surement pas nécessaire
 
     string cmd;
     
