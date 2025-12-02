@@ -38,7 +38,7 @@ void Orthese::afficherInfo() {
 
 void Orthese::afficherAvecTransformation(function<string(Point&)> f) {
     for (shared_ptr<Element> element : elements) {
-        if (auto point = dynamic_pointer_cast<Point>(element)) {
+        if (shared_ptr<Point> point = dynamic_pointer_cast<Point>(element)) {
             for (int i = 0; i < f(*point).size(); ++i) {
                 if (point->getX() + i >= grille.largeur) {
                     cout << "Point " << point->getId() << " a la texture " << f(*point)[i] <<" hors de la grille\n";
@@ -53,16 +53,16 @@ void Orthese::afficherAvecTransformation(function<string(Point&)> f) {
 
 
 void Orthese::afficherTexture() {
-    afficherAvecTransformation([](Point& p) {
-        string texture = p.getTexture() == "" ? "." : p.getTexture();
+    afficherAvecTransformation([](Point& point) {
+        string texture = point.getTexture() == "" ? "." : point.getTexture();
         return texture;
     });
 }
 
 
 void Orthese::afficherIndex() {
-    afficherAvecTransformation([](Point& p) {
-        return std::to_string(p.getId());
+    afficherAvecTransformation([](Point& point) {
+        return std::to_string(point.getId());
     });
 }
 
@@ -70,9 +70,9 @@ void Orthese::fusionnerPoints(const vector<int>& ids) {
     vector<shared_ptr<Element>> elementsAAjouter;
 
     for (int id : ids) {
-        for (auto it = elements.begin(); it != elements.end(); ++it) {
-            if ((*it)->getId() == id) {
-                elementsAAjouter.push_back(*it);
+        for (shared_ptr<Element> element : elements) {
+            if (element->getId() == id) {
+                elementsAAjouter.push_back(element);
                 break;
             }
         }
@@ -95,7 +95,7 @@ void Orthese::deplacerPoint(int id, int nouvelleX, int nouvelleY) {
     grille.viderGrille();
     for (shared_ptr<Element>& element : elements) {
         if (element->getId() == id) {
-            if (auto point = dynamic_pointer_cast<Point>(element)) {
+            if (shared_ptr<Point> point = dynamic_pointer_cast<Point>(element)) {
                 point->deplacerPoint(id, nouvelleX, nouvelleY);
                 return;
             }
@@ -110,8 +110,8 @@ void Orthese::supprimerPoint(int id) {
 
     elements.erase(
         remove_if(elements.begin(), elements.end(),
-            [id, &trouve](shared_ptr<Element>& elem) {
-                if (auto p = dynamic_pointer_cast<Point>(elem)) {
+            [id, &trouve](shared_ptr<Element>& element) {
+                if (shared_ptr<Point> p = dynamic_pointer_cast<Point>(element)) {
                     if (p->getId() == id) {
                         trouve = true;
                         return true;
@@ -123,8 +123,8 @@ void Orthese::supprimerPoint(int id) {
         elements.end()
     );
 
-    for (auto& elem : elements) {
-        if (auto nuage = dynamic_pointer_cast<Nuage>(elem)) {
+    for (shared_ptr<Element>& element : elements) {
+        if (auto nuage = dynamic_pointer_cast<Nuage>(element)) {
             nuage->supprimerPoint(id);
         }
     }
@@ -133,9 +133,9 @@ void Orthese::supprimerPoint(int id) {
         cout << "Point avec ID " << id << " non trouvé.\n";
     }
 
-    for (shared_ptr<Element> elem : elements) {
-        if (elem->getId() > id) {
-            elem->setId(elem->getId() - 1);
+    for (shared_ptr<Element> element : elements) {
+        if (element->getId() > id) {
+            element->setId(element->getId() - 1);
         }
     }
 }
@@ -159,10 +159,10 @@ void Orthese::ajouterPoint(shared_ptr<Point> point, vector<shared_ptr<Nuage>> nu
 }
 
 
-void Orthese::afficherSurface() {
+void Orthese::tracerSurface() {
     grille.viderGrille();
     for (shared_ptr<Element>& element : elements) {
-        if (auto nuage = dynamic_pointer_cast<Nuage>(element)) {
+        if (shared_ptr<Nuage> nuage = dynamic_pointer_cast<Nuage>(element)) {
             strategie->tracerSurface(nuage->getPoints(), grille);
         }
     }

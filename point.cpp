@@ -7,7 +7,7 @@
 using namespace std;
 
 void PointConcret::afficherInfo() const {
-    cout << id << ":" << " (" << x << "," << y << ") textures: '";
+    cout << id << ":" << " (" << x << "," << y << ") texture: '";
     cout << getTexture();
     cout << "'\n";
 }

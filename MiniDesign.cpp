@@ -53,18 +53,29 @@ int main(int argc, char* argv[]) {
             cout << "Nouvelle position x y: ";
             int x, y;
             cin >> x >> y;
-
-            shared_ptr<CommandeDeplacement> deplacement = make_shared<CommandeDeplacement>(orthese, id, x, y);
-            gestionnaire.setCommande(deplacement);
-            gestionnaire.executer();
+            if (id > orthese.getElements().size() - 1) {
+                cout << "Le id est invalide\n";
+            } else if (dynamic_pointer_cast<Nuage>(orthese.getElements()[id])) {
+                cout << "Il est impossible de deplacer un nuage\n";
+            } else {
+                shared_ptr<CommandeDeplacement> deplacement = make_shared<CommandeDeplacement>(orthese, id, x, y);
+                gestionnaire.setCommande(deplacement);
+                gestionnaire.executer();
+            }
         }
         if (cmd == "s") {
             cout << "ID du point à supprimer: ";
             int id;
             cin >> id;
-            shared_ptr<CommandeSupression> supression = make_shared<CommandeSupression>(orthese, id); 
-            gestionnaire.setCommande(supression);
-            gestionnaire.executer();
+            if (id > orthese.getElements().size() - 1) {
+                cout << "Le id est invalide\n";
+            } else if (dynamic_pointer_cast<Nuage>(orthese.getElements()[id])) {
+                cout << "Il est impossible de supprimer un nuage\n";
+            } else {
+                shared_ptr<CommandeSupression> supression = make_shared<CommandeSupression>(orthese, id);
+                gestionnaire.setCommande(supression);
+                gestionnaire.executer();
+            }
         }
         if (cmd == "u") {
             gestionnaire.annuler();
@@ -96,12 +107,12 @@ int main(int argc, char* argv[]) {
         if (cmd == "c1") {
             shared_ptr<SurfaceId> strategieId = make_shared<SurfaceId>();
             orthese.setStrategie(strategieId);
-            orthese.afficherSurface();
+            orthese.tracerSurface();
         }
         if (cmd == "c2") {
             shared_ptr<SurfaceDistance> strategieDistance = make_shared<SurfaceDistance>();
             orthese.setStrategie(strategieDistance);
-            orthese.afficherSurface();
+            orthese.tracerSurface();
         }
     }
 

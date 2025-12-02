@@ -51,11 +51,11 @@ void Nuage::ajouterPoint(shared_ptr<Point> point) {
 vector<shared_ptr<Point>> Nuage::getPoints() {
     vector<shared_ptr<Point>> pointsDuNuage;
 
-    for (shared_ptr<Element>& e : elements) {
-        if (auto p = dynamic_pointer_cast<Point>(e)) {
-            pointsDuNuage.push_back(p);
-        } else if (auto n = dynamic_pointer_cast<Nuage>(e)) {
-            auto pointsRec = n->getPoints();
+    for (shared_ptr<Element>& element : elements) {
+        if (shared_ptr<Point> point = dynamic_pointer_cast<Point>(element)) {
+            pointsDuNuage.push_back(point);
+        } else if (shared_ptr<Nuage> nuage = dynamic_pointer_cast<Nuage>(element)) {
+            auto pointsRec = nuage->getPoints();
             pointsDuNuage.insert(pointsDuNuage.end(), pointsRec.begin(), pointsRec.end());
         }
     }
@@ -80,7 +80,7 @@ void Nuage::ajouterTexture(int index) {
 }
 
 vector<function<shared_ptr<Element>(shared_ptr<Point>)>> Nuage::texturesDisponibles = {
-    [](shared_ptr<Point> p){ return make_shared<TextureO>(p); },
-    [](shared_ptr<Point> p){ return make_shared<TextureHash>(p); },
-    [](shared_ptr<Point> p){ return make_shared<TextureDollar>(p); }
+    [](shared_ptr<Point> point){ return make_shared<TextureO>(point); },
+    [](shared_ptr<Point> point){ return make_shared<TextureHash>(point); },
+    [](shared_ptr<Point> point){ return make_shared<TextureDollar>(point); }
 };

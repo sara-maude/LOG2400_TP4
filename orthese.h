@@ -10,7 +10,6 @@
 #include "point.h"
 #include "nuage.h"
 #include "grille.h"
-// #include "element.h"
 class Grille;
 class Point;
 class Nuage;
@@ -69,5 +68,5 @@ public:
     void ajouterPoint(shared_ptr<Point> point, vector<shared_ptr<Nuage>> nuages);
 
     // Méthodes pour tracer l'orthèse ("c1" et "c2")
-    void afficherSurface();
+    void tracerSurface();
 };

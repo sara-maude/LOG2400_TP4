@@ -32,11 +32,6 @@ CommandeDeplacement::CommandeDeplacement(Orthese& orthese, int id, int positionX
     
     shared_ptr<Point> point = dynamic_pointer_cast<Point>(orthese.getElements()[id]);
 
-    // if (!point) {
-    //     cout << "Point avec ID " << id << " non trouvé.\n";
-    //     return;
-    // }
-
     ancienX = point->getX();
     ancienY = point->getY();
 }

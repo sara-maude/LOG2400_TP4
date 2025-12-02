@@ -5,10 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
-// #include "orthese.h"
-// #include "point.h"
 #include "element.h"
-// #include "affichage.h"
 #include "grille.h"
 #include "texture.h"
 class Grille;
@@ -20,7 +17,10 @@ using namespace std;
 class Nuage: public Element {
 private:
     vector<shared_ptr<Element>> elements;
-    char texture = '%';
+    char texture;
+
+    static vector<function<shared_ptr<Element>(shared_ptr<Point>)>> texturesDisponibles;
+    static int compteur;
 
     // static vector avec les textures possibles pour plus de flexibilité
     // static vector<shared_ptr<DecorateurTexture>> texturesDisponibles;
@@ -44,7 +44,5 @@ public:
     vector<shared_ptr<Point>> getPoints();
     vector<shared_ptr<Element>> getElements();
 
-    static vector<function<shared_ptr<Element>(shared_ptr<Point>)>> texturesDisponibles;
-    static int compteur;
     void ajouterTexture(int index);
 };

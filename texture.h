@@ -21,7 +21,7 @@ public:
     }
 
     void afficherInfo() const override {
-        cout << id << ":" << " (" << getX() << "," << getY() << ") textures: '"
+        cout << id << ":" << " (" << getX() << "," << getY() << ") texture: '"
             << getTexture() << "'\n";
     }
 
